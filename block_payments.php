@@ -1,4 +1,8 @@
 <?php
+// $test = $_SERVER['REQUEST_URI'];
+// $idd = $_GET['id'];
+// global $idd; 
+// echo $idd;
 //require_once($_SERVER['DOCUMENT_ROOT'].'enrol/flutterwave/enrolment_form.php');
 // This file is part of Moodle - http://moodle.org/
 //
@@ -67,10 +71,20 @@ class block_payments extends block_base {
         }
         else {
             $trans = $DB->get_records('enrol_flutterwave');
+            // $thissub = $this->page->course;
+            // print_r($thissub);
+            
+            // $sql = "SELECT *
+            //         FROM public.mdl_enrol_flutterwave
+            //         WHERE courseid = 2 and userid = 3";
+            // $params = array('courseid' => 2, 'userid' => 3);
+            // $trans = $DB->get_record_sql($sql, $params, IGNORE_MULTIPLE);and $rec->courseid==$_GET['id']
             foreach ($trans as $rec) {
-                if ($USER->id == $rec->userid ){
+                //echo "<script>alert('". $rec->userid. "')</script>";
+                
+                if ($USER->id == $rec->userid && $rec->courseid == (isset($_GET['id']) ? trim($_GET['id']) : '')){
                     $total_cost = $rec->total_cost;
-                    $amount = $rec->amount ;
+                    $amount = $rec->amount;
                     $courseid = $rec->courseid;
                     $cname = $DB->get_record('course', array('id' => $courseid), $fields='shortname', $strictness=IGNORE_MISSING)->shortname;
                     $balance = $amount- $total_cost;
